@@ -1,1 +1,1 @@
-# TicTacToe
+# Simple TicTacToe project to practice js code organization using factory functions and module pattern
