@@ -39,35 +39,43 @@ function createPlayer(name, sign){
 
 }
 
-const player1 = createPlayer("kashif", "X");
-const player2 = createPlayer("fahad", "O");
 
 function playGame(){
+  const player1 = createPlayer("kashif", "X");
+  const player2 = createPlayer("fahad", "O");
+  let board = Gameboard.board;
+  let checkWinner = false;
 
+  while(!checkWinner){
   if(player1.giveTurn() > player2.giveTurn())
-     takeTurn(player2);
+      checkWinner = takeTurn(board, player2);
     else
-      takeTurn(player1);
-
+      checkWinner = takeTurn(board, player1);
+}
+console.log(checkWinner);
+  
 }
 
-function takeTurn(player){
 
+
+function takeTurn(board, player){
+  
     const pos = giveposition();
 
-    board = Gameboard.board;
+    if(board[pos.num1][pos.num2] === " "){
     board[pos.num1][pos.num2] = Cell(player.sign);
+    }
+    else
+    console.log("please choose a different position")
+     
+    let won = checkWinner(board, player);
    
     player.increaseTurn();
+    return won;
   
 
 }
-playGame();
-playGame();
-playGame();
-playGame();
-playGame();
-playGame();
+
 
    
  function giveposition(){
@@ -84,7 +92,53 @@ return {num1, num2};
 
  }
 
- console.log(giveposition().num1);
- console.log(giveposition().num2);
-
+ function checkWinner(board, player){
+  
  
+  for(let i=0; i<3; i++) {
+    if(board[i][0] === board[i][1] && board[i][1] === board[i][2] && board[i][0] === player.sign) {
+        
+      return ( player.name + " Won");
+      
+    }
+}
+
+for(let i=0; i<3; i++) {
+  if(board[0][i] === board[1][i] && board[2][i] === board[1][i] && board[0][i] === player.sign) {
+    
+    return (player.name + "Won");
+
+  }
+}
+  
+if(board[0][0] === board[1][1] && board[1][1] === board[2][2] && board[0][0] === player.sign) {
+   
+  return ( player.name + " Won");
+
+}
+
+if(board[2][0] === board[1][1] && board[0][2] === board[1][1] && board[2][0] === player.sign) {
+ 
+  return ( player.name + " Won");
+  
+}
+
+if(draw(board)) 
+  return ("Game Over - No one wins");
+
+   return false;
+
+
+ }
+ 
+function draw(board) {
+   let draw = true;
+ for(let i=0; i<=2; i++) {
+     for(let j=0; j<=2; j++) {
+         if(board[i][j] === " ") draw = false;
+     }
+ }
+ return draw;
+}
+
+ playGame();
