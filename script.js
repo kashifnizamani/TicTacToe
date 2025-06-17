@@ -1,9 +1,8 @@
 
 function Cell(sign){
- 
+
   return sign
 
-    
 }
 
  const Gameboard =(function () {
@@ -18,10 +17,10 @@ function Cell(sign){
       }
     }
 
-    return {board, };
+    return {board, rows, columns };
 })();
 
-console.log(Gameboard.board);
+
 
 
 function createPlayer(name, sign){
@@ -45,6 +44,10 @@ function playGame(){
   const player2 = createPlayer("fahad", "O");
   let board = Gameboard.board;
   let checkWinner = false;
+ 
+
+ 
+ 
 
   while(!checkWinner){
   if(player1.giveTurn() > player2.giveTurn())
@@ -53,6 +56,7 @@ function playGame(){
       checkWinner = takeTurn(board, player1);
 }
 console.log(checkWinner);
+display(board);
   
 }
 
@@ -60,14 +64,14 @@ console.log(checkWinner);
 
 function takeTurn(board, player){
   
-    const pos = giveposition();
+    const pos = giveposition(player);
 
     if(board[pos.num1][pos.num2] === " "){
     board[pos.num1][pos.num2] = Cell(player.sign);
     }
     else
     console.log("please choose a different position")
-     
+
     let won = checkWinner(board, player);
    
     player.increaseTurn();
@@ -141,4 +145,30 @@ function draw(board) {
  return draw;
 }
 
+function display(board){
+
+ const container = document.querySelector(".container");
+
+ const displayBoadGrid = (function (){
+    const DOMboard = []
+  for(let i = 0; i < 3; i++){
+
+     for(let j = 0; j < 3; j++){
+      const cell = document.createElement("button");
+      cell.classList.add("cell");
+      cell.textContent = board[i][j];
+      container.appendChild(cell);
+
+     }
+  }
+
+ })()
+
+   
+
+}
+
+
+
+console.log(Gameboard.board);
  playGame();

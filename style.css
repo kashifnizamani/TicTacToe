@@ -1,3 +1,23 @@
 *{
     box-sizing: border-box;
 }
+
+.container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid black;
+    gap: 10px;
+    justify-content: center;
+    place-self: center;
+   
+}
+
+.cell{
+    border: 1px solid black;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    margin: 10px;
+    font-size: 50px;
+    color: red;
+}
