@@ -20,6 +20,7 @@ function Cell(sign){
     return {board, rows, columns };
 })();
 
+let board = Gameboard.board;
 
 
 
@@ -27,74 +28,87 @@ function createPlayer(name, sign){
 
   let turn = 0;
   const increaseTurn = () => turn++;
-  const giveTurn = () => turn;
+  const getTurn = () => turn;
   
   
   const player = name;
 
-  return {name, sign, giveTurn, increaseTurn};
-
-
+  return {name, sign, getTurn, increaseTurn};
 
 }
 
 
-function playGame(){
-  const player1 = createPlayer("kashif", "X");
-  const player2 = createPlayer("fahad", "O");
-  let board = Gameboard.board;
-  let checkWinner = false;
+
+const DOMdisplay = (function display(board){
+
+  const container = document.querySelector(".container");
  
-
+  const BoardGrid = (function (){  
+   for(let i = 0; i < 3; i++){
  
+      for(let j = 0; j < 3; j++){
+       const cell = document.createElement("button");
+       cell.classList.add("cell");
+       cell.setAttribute("row", i);
+       cell.setAttribute("column", j);
  
-
-  while(!checkWinner){
-  if(player1.giveTurn() > player2.giveTurn())
-      checkWinner = takeTurn(board, player2);
-    else
-      checkWinner = takeTurn(board, player1);
-}
-console.log(checkWinner);
-display(board);
-  
-}
-
-
-
-function takeTurn(board, player){
-  
-    const pos = giveposition(player);
-
-    if(board[pos.num1][pos.num2] === " "){
-    board[pos.num1][pos.num2] = Cell(player.sign);
-    }
-    else
-    console.log("please choose a different position")
-
-    let won = checkWinner(board, player);
+       container.appendChild(cell);
+ 
+      }
+   }
    
-    player.increaseTurn();
-    return won;
-  
-
-}
-
-
-   
- function giveposition(){
-let num1, num2;
-  for (var a = [0, 1, 2], i = a.length; i--; ) {
-    num1 = a.splice(Math.floor(Math.random() * (i + 1)), 1)[0];
+ 
+  })
+     return {BoardGrid, };
+ 
     
-}
-for (var a = [0, 1, 2], i = a.length; i--; ) {
-    num2 = a.splice(Math.floor(Math.random() * (i + 1)), 1)[0];
+ 
+ })()
+ 
+ DOMdisplay.BoardGrid();
+ 
 
-}
-return {num1, num2};
+ function playGame(){
+
+  const player1 = createPlayer("kashif", "X");
+  const player2 = createPlayer("bot", "O");
+
+  function checkTurn (){
+    if(player1.getTurn()  > player2.getTurn())
+      return player2;
+    else
+      return player1;
+  }
+
+  const cells = document.querySelectorAll(".cell");
+
+  cells.forEach((cell) => {
+    cell.addEventListener("click", handleclick);
+});
+  function handleclick(event){
+        const e = event.target;
+        e.textContent = checkTurn().sign;
+        board[e.getAttribute("row")][e.getAttribute("column")] = e.textContent;
+        console.log(board);
+        checkTurn().increaseTurn();
+      
+  }
+
+
+  
+
+
+
 
  }
+
+ playGame();
+
+// dont mess up code below this for now;
+
+ 
+
+
 
  function checkWinner(board, player){
   
@@ -110,7 +124,7 @@ return {num1, num2};
 for(let i=0; i<3; i++) {
   if(board[0][i] === board[1][i] && board[2][i] === board[1][i] && board[0][i] === player.sign) {
     
-    return (player.name + "Won");
+    return (player.name + " Won");
 
   }
 }
@@ -145,30 +159,4 @@ function draw(board) {
  return draw;
 }
 
-function display(board){
-
- const container = document.querySelector(".container");
-
- const displayBoadGrid = (function (){
-    const DOMboard = []
-  for(let i = 0; i < 3; i++){
-
-     for(let j = 0; j < 3; j++){
-      const cell = document.createElement("button");
-      cell.classList.add("cell");
-      cell.textContent = board[i][j];
-      container.appendChild(cell);
-
-     }
-  }
-
- })()
-
-   
-
-}
-
-
-
-console.log(Gameboard.board);
- playGame();
+ 
