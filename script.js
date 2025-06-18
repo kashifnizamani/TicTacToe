@@ -39,7 +39,7 @@ function createPlayer(name, sign){
 
 
 
-const DOMdisplay = (function display(board){
+const DOMdisplay = (function display(){
 
   const container = document.querySelector(".container");
  
@@ -81,16 +81,36 @@ const DOMdisplay = (function display(board){
   }
 
   const cells = document.querySelectorAll(".cell");
-
+  let gameover = false;
+  let result = checkWinner(board, checkTurn());
   cells.forEach((cell) => {
-    cell.addEventListener("click", handleclick);
+
+    
+    cell.addEventListener("click", (e)=>{
+    
+      if(result){
+        alert(result)
+        return
+      }
+      else if(board[cell.getAttribute("row")][cell.getAttribute("column")] !== " "){
+        return;
+      }
+      else{
+       result = handleclick(cell);
+       checkTurn().increaseTurn();
+      
+      }
+  });
+
 });
-  function handleclick(event){
-        const e = event.target;
-        e.textContent = checkTurn().sign;
+
+  function handleclick(e){
+    let current = checkTurn();
+        e.textContent = current.sign;
         board[e.getAttribute("row")][e.getAttribute("column")] = e.textContent;
-        console.log(board);
-        checkTurn().increaseTurn();
+        
+        return checkWinner(board, current);
+        
       
   }
 
