@@ -1,4 +1,10 @@
 
+const container = document.querySelector(".container");
+const closeButton = document.querySelector(".close");
+const submitButton = document.querySelector(".submit");
+const header = document.querySelector(".header")
+const span = document.createElement("span");
+
 function Cell(sign){
 
   return sign
@@ -41,7 +47,7 @@ function createPlayer(name, sign){
 
 const DOMdisplay = (function display(){
 
-  const container = document.querySelector(".container");
+
  
   const BoardGrid = (function (){  
    for(let i = 0; i < 3; i++){
@@ -51,7 +57,7 @@ const DOMdisplay = (function display(){
        cell.classList.add("cell");
        cell.setAttribute("row", i);
        cell.setAttribute("column", j);
- 
+      
        container.appendChild(cell);
  
       }
@@ -59,20 +65,75 @@ const DOMdisplay = (function display(){
    
  
   })
+
+  const updateBoardGrid = (function (){
+    
+  })
+
+
+
      return {BoardGrid, };
  
     
  
  })()
  
- DOMdisplay.BoardGrid();
+
+
+ const startbtn = document.querySelector(".start");
+ const dialog = document.querySelector(".NewGame");
+ const name1 = document.createElement("div");
+ const name2 = document.createElement("div");
+ let calls = 0;
+
+ startbtn.addEventListener("click", ()=> {
+
+        dialog.showModal(); 
+
+ });
+
  
 
- function playGame(){
+  
 
-  const player1 = createPlayer("kashif", "X");
-  const player2 = createPlayer("bot", "O");
+  closeButton.addEventListener("click", ()=> {
+    dialog.close();
+})
 
+
+submitButton.addEventListener("click", (e)=> {
+
+
+
+
+  name1.textContent = document.querySelector("#player1").value;
+  name2.textContent = document.querySelector("#player2").value;
+  
+  span.append(name1);
+  span.append(name2);
+  startbtn.textContent = "Restart";
+  header.append(span);
+  DOMdisplay.BoardGrid();
+ 
+  dialog.close();
+  playGame(name1.textContent, name2.textContent);
+  
+
+
+})
+
+  
+ 
+
+ 
+
+ function playGame(name1, name2){
+
+
+  const player1 = createPlayer(name1, "X");
+  const player2 = createPlayer(name2, "O");
+  
+   console.log(player1);
   function checkTurn (){
     if(player1.getTurn()  > player2.getTurn())
       return player2;
@@ -82,21 +143,25 @@ const DOMdisplay = (function display(){
 
   const cells = document.querySelectorAll(".cell");
   let gameover = false;
-  let result = checkWinner(board, checkTurn());
+  let result;
   cells.forEach((cell) => {
 
     
     cell.addEventListener("click", (e)=>{
     
-      if(result){
-        alert(result)
-        return
-      }
-      else if(board[cell.getAttribute("row")][cell.getAttribute("column")] !== " "){
+    
+      if(board[cell.getAttribute("row")][cell.getAttribute("column")] !== " "){
         return;
       }
       else{
-       result = handleclick(cell);
+        result = handleclick(cell);
+       
+       if(result){
+        alert(result);
+        return;
+      }
+      
+      
        checkTurn().increaseTurn();
       
       }
@@ -104,12 +169,26 @@ const DOMdisplay = (function display(){
 
 });
 
+   
   function handleclick(e){
+    if(result){
+    
+      return result;
+
+    }
+    else{
     let current = checkTurn();
-        e.textContent = current.sign;
-        board[e.getAttribute("row")][e.getAttribute("column")] = e.textContent;
+    board[e.getAttribute("row")][e.getAttribute("column")] = current.sign;
+     result =  checkWinner(board, current);
+    e.textContent = current.sign;
+    console.log(board)
+    return result;
+    }
+  
+    
         
-        return checkWinner(board, current);
+       
+      
         
       
   }
@@ -122,7 +201,7 @@ const DOMdisplay = (function display(){
 
  }
 
- playGame();
+
 
 // dont mess up code below this for now;
 
