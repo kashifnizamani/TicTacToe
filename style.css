@@ -1,7 +1,7 @@
 *{
     box-sizing: border-box;
-    background-color: rgb(127, 40, 151);
-    color: white;
+    
+   
 }
 
 .container{
@@ -89,7 +89,14 @@ form{
    button.start{
      display: grid;
     justify-self: center;
+    
     width: 100px;
     margin: 10px;
 
+   }
+
+   .close{
+    border: none;
+    background-color: inherit;
+    margin-bottom: 10px;
    }

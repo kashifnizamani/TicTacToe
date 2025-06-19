@@ -4,6 +4,11 @@ const closeButton = document.querySelector(".close");
 const submitButton = document.querySelector(".submit");
 const header = document.querySelector(".header")
 const span = document.createElement("span");
+const startbtn = document.querySelector(".start");
+const dialog = document.querySelector(".NewGame");
+const name1 = document.createElement("div");
+const name2 = document.createElement("div");
+let calls = 0;
 
 function Cell(sign){
 
@@ -26,7 +31,7 @@ function Cell(sign){
     return {board, rows, columns };
 })();
 
-let board = Gameboard.board;
+
 
 
 
@@ -35,9 +40,6 @@ function createPlayer(name, sign){
   let turn = 0;
   const increaseTurn = () => turn++;
   const getTurn = () => turn;
-  
-  
-  const player = name;
 
   return {name, sign, getTurn, increaseTurn};
 
@@ -66,25 +68,31 @@ const DOMdisplay = (function display(){
  
   })
 
-  const updateBoardGrid = (function (){
+  const updateBoardGrid = (function (board){
+
     
-  })
-
-
-
-     return {BoardGrid, };
- 
+      container.innerHTML = ""; 
     
+      for (let i = 0; i < 3; i++) {
+        board[i] = [];
+        for (let j = 0; j < 3; j++) {
+          board[i][j] = " ";
+          const cell = document.createElement("button");
+          cell.classList.add("cell");
+          cell.setAttribute("row", i);
+          cell.setAttribute("column", j);
+          cell.textContent = " ";
+    
+          container.appendChild(cell);
+        }
+      }
+    })
+    
+  
+
+     return {BoardGrid, updateBoardGrid };
  
  })()
- 
-
-
- const startbtn = document.querySelector(".start");
- const dialog = document.querySelector(".NewGame");
- const name1 = document.createElement("div");
- const name2 = document.createElement("div");
- let calls = 0;
 
  startbtn.addEventListener("click", ()=> {
 
@@ -93,7 +101,7 @@ const DOMdisplay = (function display(){
  });
 
  
-
+  DOMdisplay.BoardGrid();
   
 
   closeButton.addEventListener("click", ()=> {
@@ -103,9 +111,6 @@ const DOMdisplay = (function display(){
 
 submitButton.addEventListener("click", (e)=> {
 
-
-
-
   name1.textContent = document.querySelector("#player1").value;
   name2.textContent = document.querySelector("#player2").value;
   
@@ -113,22 +118,23 @@ submitButton.addEventListener("click", (e)=> {
   span.append(name2);
   startbtn.textContent = "Restart";
   header.append(span);
-  DOMdisplay.BoardGrid();
+  if(calls){
+      
+    DOMdisplay.updateBoardGrid(Gameboard.board);
+    
+  }
+  calls++;
+
+  dialog.close( playGame(name1.textContent, name2.textContent));
  
-  dialog.close();
-  playGame(name1.textContent, name2.textContent);
   
 
 
 })
 
-  
- 
-
- 
-
  function playGame(name1, name2){
-
+  let result = false;
+   let board = Gameboard.board;
 
   const player1 = createPlayer(name1, "X");
   const player2 = createPlayer(name2, "O");
@@ -142,8 +148,8 @@ submitButton.addEventListener("click", (e)=> {
   }
 
   const cells = document.querySelectorAll(".cell");
-  let gameover = false;
-  let result;
+
+  
   cells.forEach((cell) => {
 
     
@@ -154,6 +160,7 @@ submitButton.addEventListener("click", (e)=> {
         return;
       }
       else{
+        
         result = handleclick(cell);
        
        if(result){
@@ -162,15 +169,17 @@ submitButton.addEventListener("click", (e)=> {
       }
       
       
-       checkTurn().increaseTurn();
+      
       
       }
+      checkTurn().increaseTurn();
   });
 
 });
 
    
   function handleclick(e){
+    console.log(result);
     if(result){
     
       return result;
@@ -185,32 +194,12 @@ submitButton.addEventListener("click", (e)=> {
     return result;
     }
   
-    
-        
-       
-      
-        
-      
   }
-
-
-  
-
-
-
 
  }
 
-
-
-// dont mess up code below this for now;
-
- 
-
-
-
  function checkWinner(board, player){
-  
+  console.log(board);
  
   for(let i=0; i<3; i++) {
     if(board[i][0] === board[i][1] && board[i][1] === board[i][2] && board[i][0] === player.sign) {
