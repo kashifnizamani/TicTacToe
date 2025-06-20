@@ -72,6 +72,7 @@ const DOMdisplay = (function display(){
 
     
       container.innerHTML = ""; 
+      header.innerHTML = "";
     
       for (let i = 0; i < 3; i++) {
         board[i] = [];
@@ -111,6 +112,11 @@ const DOMdisplay = (function display(){
 
 submitButton.addEventListener("click", (e)=> {
 
+  if(calls){
+      
+    DOMdisplay.updateBoardGrid(Gameboard.board);
+    
+  }
   name1.textContent = document.querySelector("#player1").value;
   name2.textContent = document.querySelector("#player2").value;
   
@@ -118,11 +124,7 @@ submitButton.addEventListener("click", (e)=> {
   span.append(name2);
   startbtn.textContent = "Restart";
   header.append(span);
-  if(calls){
-      
-    DOMdisplay.updateBoardGrid(Gameboard.board);
-    
-  }
+ 
   calls++;
 
   dialog.close( playGame(name1.textContent, name2.textContent));
@@ -148,7 +150,7 @@ submitButton.addEventListener("click", (e)=> {
   }
 
   const cells = document.querySelectorAll(".cell");
-
+  let announcement = 0;
   
   cells.forEach((cell) => {
 
@@ -163,9 +165,17 @@ submitButton.addEventListener("click", (e)=> {
         
         result = handleclick(cell);
        
-       if(result){
-        alert(result);
+       if(result && !announcement){
+        const div = document.createElement("div");
+        div.textContent = result;
+        header.append(div);
+        announcement++;
         return;
+
+      }
+      else if(result){
+
+        return;s
       }
       
       

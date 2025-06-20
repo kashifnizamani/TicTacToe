@@ -100,3 +100,10 @@ form{
     background-color: inherit;
     margin-bottom: 10px;
    }
+
+
+   .header >div{
+
+    text-align: center;
+    font-size: 2rem;
+   }
