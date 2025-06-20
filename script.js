@@ -141,7 +141,6 @@ submitButton.addEventListener("click", (e)=> {
   const player1 = createPlayer(name1, "X");
   const player2 = createPlayer(name2, "O");
   
-   console.log(player1);
   function checkTurn (){
     if(player1.getTurn()  > player2.getTurn())
       return player2;
@@ -189,7 +188,6 @@ submitButton.addEventListener("click", (e)=> {
 
    
   function handleclick(e){
-    console.log(result);
     if(result){
     
       return result;
@@ -200,7 +198,8 @@ submitButton.addEventListener("click", (e)=> {
     board[e.getAttribute("row")][e.getAttribute("column")] = current.sign;
      result =  checkWinner(board, current);
     e.textContent = current.sign;
-    console.log(board)
+    if(e.textContent === "X")
+      e.style.cssText = "color: red;";
     return result;
     }
   
@@ -209,8 +208,7 @@ submitButton.addEventListener("click", (e)=> {
  }
 
  function checkWinner(board, player){
-  console.log(board);
- 
+
   for(let i=0; i<3; i++) {
     if(board[i][0] === board[i][1] && board[i][1] === board[i][2] && board[i][0] === player.sign) {
         
